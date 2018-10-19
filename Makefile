@@ -66,7 +66,7 @@ $(LIBFT_FLAG): $(LIBFT)
 
 # ! --############## Be sure to eventually switch to .o files (.c for now in debugging.)
 clean:
-	make clean -C $(MLX_DIR)
+# !	make clean -C $(MLX_DIR)
 	make clean -C $(LIBFT_DIR)
 
 fclean: clean
