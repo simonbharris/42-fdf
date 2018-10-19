@@ -42,28 +42,40 @@ static int	get_word_lc(char const *s, char c)
 	return (i);
 }
 
+static void	freesplit(char ***split, int n)
+{
+	int i;
+
+	i = 0;
+	while (i < n)
+		free(*(split[i++]));
+	free(*split);
+	*split = NULL;
+}
+
 char		**ft_strsplit(char const *s, char c)
 {
 	char	*word;
 	char	**split;
-	int		i;
 	int		sc;
 
 	sc = 0;
 	if (!s || NULL == (split = (char **)ft_memalloc(sizeof(char *)
-		* (get_split_count(s, c) + 1))))
+	* (get_split_count(s, c) + 1))))
 		return (NULL);
-	while (*s)
+	while (s && *s)
 	{
-		i = 0;
 		while (*s && *s == c)
 			s++;
 		if (*s && *s != c)
 		{
-			word = ft_strnew(get_word_lc(s, c));
-			while (*s && *s != c)
-				word[i++] = *s++;
+			if (NULL == (word = ft_strndup(s, get_word_lc(s, c))))
+			{
+				freesplit(&split, sc);
+				return (NULL);
+			}
 			split[sc++] = word;
+			s = ft_strchr(s, ' ');
 		}
 	}
 	split[sc] = 0;

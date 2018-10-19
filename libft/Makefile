@@ -19,6 +19,7 @@ OBJ_DIR = ./obj/
 SRC_FILES = ft_abs.c \
 			ft_atoi.c \
 			ft_bzero.c \
+			ft_hextoi.c \
 			ft_isalnum.c \
 			ft_isalpha.c \
 			ft_isascii.c \
@@ -81,6 +82,7 @@ SRC_FILES = ft_abs.c \
 			ft_strncat.c \
 			ft_strncmp.c \
 			ft_strncpy.c \
+			ft_strndup.c \
 			ft_strnequ.c \
 			ft_strnew.c \
 			ft_strnstr.c \
@@ -100,6 +102,7 @@ SRC_FILES = ft_abs.c \
 			ft_wstrnew.c \
 			ft_wstrsub.c \
 			get_next_line.c
+
 OBJ = $(SRC_FILES:%.c=$(OBJ_DIR)%.o)
 HEADER = $(INC_DIR)/libft.h
 
