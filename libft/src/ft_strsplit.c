@@ -75,7 +75,7 @@ char		**ft_strsplit(char const *s, char c)
 				return (NULL);
 			}
 			split[sc++] = word;
-			s = ft_strchr(s, ' ');
+			s = ft_strchr(s, c);
 		}
 	}
 	split[sc] = 0;
