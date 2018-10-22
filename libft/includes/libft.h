@@ -131,5 +131,7 @@ wchar_t			*ft_wstrsub(wchar_t const *s, unsigned int start, size_t len);
 char			*ft_lltoa(long long n);
 long long		ft_hextoi(char *str);
 char			*ft_strndup(const char *str, int n);
+int				ft_parrlen(void **arr);
+long long		ft_pow(long long nbr, int p);
 
 #endif

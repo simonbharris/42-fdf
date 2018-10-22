@@ -51,6 +51,8 @@ SRC_FILES = ft_abs.c \
 			ft_memmove.c \
 			ft_memset.c \
 			ft_mod.c \
+			ft_parrlen.c \
+			ft_pow.c \
 			ft_putchar.c \
 			ft_putchar_fd.c \
 			ft_putendl.c \
