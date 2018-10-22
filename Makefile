@@ -15,7 +15,9 @@ NAME = fdf
 # Sources and objects
 SRC_RAW = 	main \
 			fdf \
-			err
+			err \
+			maputil \
+			vector
 
 SRC = $(SRC_RAW:%=$(SRC_DIR)%.c)
 SRC_DIR = src/
@@ -27,7 +29,8 @@ INC_FLAG = -I $(INC)
 # LIB
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
-LIBFT_FLAG = -L $(LIBFT_DIR) -l ft -I $(LIBFT_DIR)includes
+LIBFT_FLAG = $(LIBFT_DIR)src/* -I $(LIBFT_DIR)includes
+# TODO: Keep this -> LIBFT_FLAG = -L $(LIBFT_DIR) -l ft -I $(LIBFT_DIR)includes
 
 # minilibx
 MLX_DIR = minilibx/
@@ -51,7 +54,7 @@ $(OBJ_DIR):
 
 # ! -########################  Replace SRC_RAW with OBJ equivalent
 $(NAME): $(LIBFT) $(MLX_LIB)
-	$(CC) $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(SRC) -o $(NAME)
+	$(CC) -g $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(SRC) -o $(NAME)
 
 $(OBJ): $(OBJ_DIR)%.o : $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) $< -o $@
@@ -71,6 +74,6 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	make clean -C $(LIBFT_DIR)
+	make fclean -C $(LIBFT_DIR)
 
 re: fclean all

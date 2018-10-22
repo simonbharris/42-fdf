@@ -6,14 +6,20 @@
 /*   By: sharris <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/12 10:54:45 by sharris           #+#    #+#             */
-/*   Updated: 2018/10/12 10:54:47 by sharris          ###   ########.fr       */
+/*   Updated: 2018/10/20 15:38:20 by sharris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ftf.h>
+#include <fdf.h>
 #include <get_next_line.h>
 
+//! REMOVE 
+#include <stdio.h>
+
 #define TWIDTH 25
+#define MAXMAP 1000
+#define XO = 400;
+#define YO = 400;
 
 int	ft_openfile(char *file)
 {
@@ -33,57 +39,98 @@ int	ft_openfile(char *file)
 	return (fd);
 }
 
-char **get_map(int fd)
+t_vector *splittovect(char **split, int ind)
 {
-	
+	int i;
+	int len;
+	char *tmp;
+	int col;
+	t_vector *vects;
+
+	i = 0;
+	vects = (t_vector *)malloc(sizeof(t_vector)
+		* (ft_parrlen((void **)split) + 1));
+	while (split[i])
+	{
+		if ((tmp = ft_strchr(split[i], ',')))
+			col = (int)ft_hextoi(tmp + 1);
+		vects[i] = new_vect(i, ind, ft_atoi(split[i]), tmp == NULL ? NULL : &col);
+		i++;
+	}
+	vects[i] = new_vect(-1, -1, 0, NULL);
+	i = 0;
+	while (split[i])
+		free(split[i++]);
+	free(split);
+	return(vects);
+}
+
+t_vector	**get_map(int fd)
+{
+	t_vector	**map;
+	char		*line;
+	int			i;
+
+	i = 0;
+	map = (t_vector **)ft_memalloc(sizeof(t_vector *) * MAXMAP);
+	while (i < MAXMAP && get_next_line(fd, &line))
+	{
+		map[i] = splittovect(ft_strsplit(line, ' '), i);
+		free(line);
+		i++;
+	}
+	map[i] = NULL;
+	return(map);
+}
+
+// void	printmap(char ***map)
+// {
+// 	int i = 0;
+// 	int j = 0;
+
+
+// 	while (map[i])
+// 	{
+// 		while (map[i][j])
+// 		{
+// 			if (map[i + 1][j])
+				
+// 		}
+// 	}
+// }
+
+void putline(void *mlxp, void *winp, int pos1[2], int pos2[2])
+{
+	double i;
+
+	i = 0;
+	while (i < 1)
+	{
+		mlx_pixel_put(mlxp, winp, pos1[0] + pos2[0] * i,
+			pos1[1] + pos2[1] * i, DEFAULT_COLOR);
+		i += 1 / (double)WIN_MAX_SIZE;
+	}
 }
 
 void	put_fdf(char *file)
 {
+
+	int i;
+	int fd;
 	void *mlxp;
 	void *winp;
-	int i = 0;
-	char **map;
-
-	// ? V -- Return the FD
-	ft_openfile(file);
-	map = get_map(ft_openfile(file));
-
-//	! --- Get file conttents first, then deal with fdf.
+	
 	mlxp = mlx_init();
 	winp = mlx_new_window(mlxp, WIN_SIZE_X, WIN_SIZE_Y, WIN_NAME);
-	mlx_string_put(mlxp, winp, 25, 25, 0xfffff, "Hello World");
-	while (i < 50)
-	{
-		mlx_pixel_put(mlxp, winp, 50 + i, 50 + i, 0xffffff);
-		i++;
-	}
 
-	mlx_loop(mlxp);
+	i = 0;
+	// map = get_map(fd = ft_openfile(file));
+
+	int p1[2] = { 0, 400 };
+	int p2[2] = { 800, 0 };
+	//	! --- Get file conttents first, then deal with fdf.
+
+	// mlx_string_put(mlxp, winp, 25, 25, 0xfffff, "Hello World");
+	// putline(mlxp, winp, p1, p2);
+	// mlx_loop(mlxp);
 }
-
-/*
-? -- Brainstorming
-* Going to need to break the file up with ft_split.
-* Afterwards, I need to be able to have a funciton that can pull  values one at a ttime
-* -- The kicker is if I want to do the bonus, I need to grab and stored the color pattern in same block
-* 
-*A couple way that comes to mind with handling this, is to just parse down the line when printing.
-* and to just write the lines as they go along.
-* Another though tis to store them into structes; which come at the cost of more memory usages..
-* Also with structes I can better keep track of other attributes
-* -- But the need for other attributes is a question I do no yet have an answer to.
-
-* As for printingthe map. I imagine I need to figure out the position of a point on the map
-* this would be based off the relative x y cordinate in the file
-* in addition to how the simulated plane is both rotated and tilted.
-* -- there needs to be some tilt so that slopes can be seen.
-
-* Currently, I don't know how to deal with simulating tilt. Rotations, Ithink, should be much more simply
-* ... But I could be wrong.
-* But once I discover where the position of each point of the file should be location.
-* I simply have to draw lines from point A to adjustent points to B and C, and loop it
-* through every point.
-
-* At that point, is when I can use key hooks nad loops to respond to user input.
-*/
