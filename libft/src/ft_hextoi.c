@@ -31,17 +31,18 @@ static int			get_hex_charv(char c)
 	return (-1000000);
 }
 
-static long long	get_hex_value(char *str)
+long long	get_hex_value(char *str)
 {
 	long long out;
+	int len;
 
-	out = 1;
+	out = 0;
+	len = 0;
+	while (is_hexchar(str[len++ + 1]))
+		;
 	while (is_hexchar(*str))
 	{
-		if (is_hexchar(*(str + 1)))
-			out *= 16 * get_hex_charv(*str);
-		else
-			out += get_hex_charv(*str);
+		out += get_hex_charv(*str) * ft_pow(16, --len);
 		str++;
 	}
 	return (out);
