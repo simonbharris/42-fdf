@@ -37,27 +37,31 @@ int main(int ac, char **av)
 0 0 1 1 1";
 	char **split;
 
-	char **nl = ft_strsplit(str, '\n');
-	t_vector **map;
-	map = (t_vector **)malloc(sizeof(t_vector) * 100);
+	// char **nl = ft_strsplit(str, '\n');
+	// t_vector **vects;
+	// vects = (t_vector **)malloc(sizeof(t_vector) * 100);
 
-	while (nl[i])
-	{
-		split = ft_strsplit(nl[i], ' ');
-		map[i] = splittovect(split, i);
-		i++;
-	}
-	map[i] = 0;
-	i = 0;
-	while (map[i])
-	{
-		j = 0;
-		while(map[i][j].x != -1)
-			printf("%d ", map[i][j++].color);
-		printf("\n");
-		i++;
-	}
-		printf("\n%d -- pow\n", (int)get_hex_value("f"));
+	// while (nl[i])
+	// {
+	// 	split = ft_strsplit(nl[i], ' ');
+	// 	vects[i] = splittovect(split, i);
+	// 	i++;
+	// }
+	// vects[i] = 0;
+	// i = 0;
+	put_fdf(av[1]);
+
+	// while (map[i])
+	// {
+	// 	j = 0;
+	// 	while(map[i][j].x != -1)
+	// 		printf("%d ", map[i][j++].color);
+	// 	printf("\n");
+	// 	i++;
+	// }
+	// printf("\n%d -- pow\n", (int)get_hex_value("f"));
+	sleep(10);
+
 	// mapdel(map);
 	// mapdel(&map);
 	// void *mlxp = mlx_init();

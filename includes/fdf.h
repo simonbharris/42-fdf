@@ -24,9 +24,9 @@
 # define WIN_MAX_SIZE (WIN_SIZE_X > WIN_SIZE_Y ? WIN_SIZE_X : WIN_SIZE_Y)
 # define WIN_NAME "fdf"
 # define DEFAULT_COLOR 0xffffff
-# define SCALE 25
-# define X_OFF (WIN_SIZE_X / 2)
-# define Y_OFF (WIN_SIZE_Y / 2)
+# define MAP_SCALE 25
+# define X_OFF 200
+# define Y_OFF 200
 
 /*
 ** For the sake of arrays,
@@ -43,10 +43,12 @@ typedef struct	s_vector
 
 typedef struct	s_map
 {
+	void *mlxp;
+	void *winp;
 	int rx;
 	int ry;
 	int rz;
-	int scale;
+	double scale;
 	int xo;
 	int yo;
 }				t_map;
@@ -55,8 +57,10 @@ int			ft_openfile(char *file);
 void		put_fdf(char *file);
 t_vector	**get_map(int fd);
 void		mapdel(char ***map);
-void		putline(void *mlxp, void *winp, int pos1[2], int pos2[2]);
+void putline(t_map *map, t_vector v1, t_vector v2);
 t_vector	new_vect(int x, int y, int z, int *color);
 t_vector *splittovect(char **split, int ind);
+t_map	*initmap(int *fd, char *file);
+
 
 #endif

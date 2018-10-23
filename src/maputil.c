@@ -31,3 +31,19 @@ void	mapdel(char ***map)
 		i++;
 	}
 }
+
+t_map	*initmap(int *fd, char *file)
+{
+	t_map *map;
+
+	map = (t_map *)malloc(sizeof(t_map));
+	map->mlxp = mlx_init();
+	map->winp = mlx_new_window(map->mlxp, WIN_SIZE_X, WIN_SIZE_Y, WIN_NAME);
+	map->rx = 0;
+	map->ry = 0;
+	map->rz = 0;
+	map->scale = 1;
+	map->xo = X_OFF;
+	map->yo = Y_OFF;
+	return (map);
+}

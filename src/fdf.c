@@ -20,6 +20,9 @@
 #define MAXMAP 1000
 #define XO = 400;
 #define YO = 400;
+#define SCALE(x) x * MAP_SCALE
+#define SCALE_PTS(x, y, i) ((double)(X_OFF + x * TWIDTH) + (y * TWIDTH) * i)
+#define Z(x) ((x).z == 0 ? 1 : (x).z)
 
 int	ft_openfile(char *file)
 {
@@ -65,72 +68,71 @@ t_vector *splittovect(char **split, int ind)
 	return(vects);
 }
 
-t_vector	**get_map(int fd)
+t_vector	**get_vectors(int fd)
 {
-	t_vector	**map;
+	t_vector	**vects;
 	char		*line;
 	int			i;
 
 	i = 0;
-	map = (t_vector **)ft_memalloc(sizeof(t_vector *) * MAXMAP);
+	vects = (t_vector **)ft_memalloc(sizeof(t_vector *) * MAXMAP);
 	while (i < MAXMAP && get_next_line(fd, &line))
 	{
-		map[i] = splittovect(ft_strsplit(line, ' '), i);
+		vects[i] = splittovect(ft_strsplit(line, ' '), i);
 		free(line);
 		i++;
 	}
-	map[i] = NULL;
-	return(map);
+	vects[i] = NULL;
+	return(vects);
 }
 
-// void	printmap(char ***map)
-// {
-// 	int i = 0;
-// 	int j = 0;
+void	printmap(t_map *map, t_vector **vects)
+{
+	int i = 0;
+	int j = 0;
 
+	while (vects[i])
+	{
+		j = 0;
+		while (vects[i][j].x != -1)
+		{
+			// if (vects[i + 1] && vects[i + 1][j].x != -1)
+			// 	putline(map, vects[i][j], vects[i + 1][j]);
+			if (vects[i][j + 1].x != -1)
+				putline(map, vects[i][j], vects[i][j+1]);
+			j++;
+		}
+		i++;
+	}
+}
 
-// 	while (map[i])
-// 	{
-// 		while (map[i][j])
-// 		{
-// 			if (map[i + 1][j])
-				
-// 		}
-// 	}
-// }
-
-void putline(void *mlxp, void *winp, int pos1[2], int pos2[2])
+void putline(t_map *map, t_vector v1, t_vector v2)
 {
 	double i;
 
 	i = 0;
 	while (i < 1)
 	{
-		mlx_pixel_put(mlxp, winp, pos1[0] + pos2[0] * i,
-			pos1[1] + pos2[1] * i, DEFAULT_COLOR);
+		mlx_pixel_put(map->mlxp, map->winp, SCALE_PTS(v1.x, v2.x, i),
+			SCALE_PTS(v1.y, v2.y, i), DEFAULT_COLOR);
 		i += 1 / (double)WIN_MAX_SIZE;
 	}
 }
+
 
 void	put_fdf(char *file)
 {
 
 	int i;
 	int fd;
-	void *mlxp;
-	void *winp;
+	t_map *map;
+	t_vector **vects;
 	
-	mlxp = mlx_init();
-	winp = mlx_new_window(mlxp, WIN_SIZE_X, WIN_SIZE_Y, WIN_NAME);
+	map = initmap(&fd, file);
+	vects = get_vectors(fd = ft_openfile(file));
 
-	i = 0;
-	// map = get_map(fd = ft_openfile(file));
-
-	int p1[2] = { 0, 400 };
-	int p2[2] = { 800, 0 };
-	//	! --- Get file conttents first, then deal with fdf.
-
-	// mlx_string_put(mlxp, winp, 25, 25, 0xfffff, "Hello World");
-	// putline(mlxp, winp, p1, p2);
-	// mlx_loop(mlxp);
+	printmap(map, vects);
+	
+	close(fd);
+	mlx_loop(map->mlxp);
 }
