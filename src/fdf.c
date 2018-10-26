@@ -16,13 +16,22 @@
 //! REMOVE 
 #include <stdio.h>
 
-#define TWIDTH 25
+#define TWIDTH 20
+#define ZSCALE 2
 #define MAXMAP 1000
-#define XO = 400;
-#define YO = 400;
+#define XO 200
+#define YO 200
 #define SCALE(x) x * MAP_SCALE
-#define SCALE_PTS(x, y, i) ((double)(X_OFF + x * TWIDTH) + (y * TWIDTH) * i)
-#define Z(x) ((x).z == 0 ? 1 : (x).z)
+#define POSX(x,z) (x / z)
+#define POSY(y,z) (y / z)
+#define SCALE_PTS(x1, x2, i) (XO + x1) + (x2 - x1) * i
+#define Z(x) ((x).z == 0 ? 0.01 : (x).z)
+#define rX 1
+#define rY 1
+#define rZ 1.4
+#define rXY rX * rY
+#define rYZ rY * rZ
+#define rXZ rX * rZ
 
 int	ft_openfile(char *file)
 {
@@ -60,7 +69,7 @@ t_vector *splittovect(char **split, int ind)
 		vects[i] = new_vect(i, ind, ft_atoi(split[i]), tmp == NULL ? NULL : &col);
 		i++;
 	}
-	vects[i] = new_vect(-1, -1, 0, NULL);
+	vects[i] = new_wall_vect();
 	i = 0;
 	while (split[i])
 		free(split[i++]);
@@ -94,11 +103,11 @@ void	printmap(t_map *map, t_vector **vects)
 	while (vects[i])
 	{
 		j = 0;
-		while (vects[i][j].x != -1)
+		while (vects[i][j].wall != 1)
 		{
-			// if (vects[i + 1] && vects[i + 1][j].x != -1)
-			// 	putline(map, vects[i][j], vects[i + 1][j]);
-			if (vects[i][j + 1].x != -1)
+			if (vects[i + 1])
+				putline(map, vects[i][j], vects[i + 1][j]);
+			if (vects[i][j + 1].wall != 1)
 				putline(map, vects[i][j], vects[i][j+1]);
 			j++;
 		}
@@ -106,16 +115,62 @@ void	printmap(t_map *map, t_vector **vects)
 	}
 }
 
+int gradient(int v1, int v2, int pos)
+{
+	int col[2];
+	int r[2];
+	int g[2];
+	int b[2];
+	int i;
+
+	col[0] = v1;
+	col[1] = v2;
+	i = 0;
+	while (i < 2)
+	{
+		r[i] = col[i] & 0xff0000;
+		g[i] = col[i] & 0x00ff00;
+		b[i] = col[i] & 0x0000ff;
+		i++;
+	}
+	return
+	(
+		((r[0] + (r[0] - r[1]) * pos / 100) & 0xff0000)
+		| ((g[0] + (g[0] - g[1]) * pos / 100) & 0x00ff00)
+		| ((b[0] + (b[0] - b[1]) * pos / 100) & 0x0000ff)
+	);
+}
+
+t_vector rotate_vect(t_map map,t_vector v)
+{
+	v = new_vect(cos(rXY) * v.x - sin(rXY) * v.y, (cos(rXY) * v.y + sin(rXY) * v.x), v.z, &v.color);
+	v = new_vect(cos(rXZ) * v.x - sin(rXZ) * v.z, v.y, sin(rXZ) * v.x + cos(rXZ) * v.z, &v.color);
+	v = new_vect(v.x, cos(rYZ) * v.y - sin(rYZ) * v.z, cos(rYZ) * v.z + cos(rYZ) * v.y, &v.color);
+	return(v);
+}
+
 void putline(t_map *map, t_vector v1, t_vector v2)
 {
 	double i;
+	double x[2];
+	double y[2];
+	double hyp;
 
+	
 	i = 0;
+	v1 = rotate_vect(*map, v1);
+	v2 = rotate_vect(*map, v2);
+	hyp = sqrt(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2));
 	while (i < 1)
 	{
-		mlx_pixel_put(map->mlxp, map->winp, SCALE_PTS(v1.x, v2.x, i),
-			SCALE_PTS(v1.y, v2.y, i), DEFAULT_COLOR);
-		i += 1 / (double)WIN_MAX_SIZE;
+		if (v1.x > WIN_SIZE_X || v1.y > WIN_SIZE_Y)
+			break ;
+		mlx_pixel_put(map->mlxp, map->winp, \
+		SCALE_PTS(v1.x, v2.x, i),\
+		SCALE_PTS(v1.y, v2.y, i),\
+		gradient(v2.color, v1.color, i * 100));
+		
+		i += 1 / hyp;
 	}
 }
 
