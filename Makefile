@@ -25,6 +25,7 @@ OBJ = $(SRC_RAW:%=$(OBJ_DIR)%.o)
 OBJ_DIR = obj/
 INC = includes/
 INC_FLAG = -I $(INC)
+HEADER = $(INC)fdf.h
 
 # LIB
 LIBFT_DIR = libft/
@@ -68,6 +69,10 @@ $(MLX_LIB):
 	make -C $(MLX_DIR)
 
 $(LIBFT_FLAG): $(LIBFT)
+
+debug: $(OBJ_DIR) $(LIBFT) $(MLX_LIB) $(OBJ)
+	$(CC) -g $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(SRC) -o $(NAME)
+
 
 # ! --############## Be sure to eventually switch to .o files (.c for now in debugging.)
 clean:

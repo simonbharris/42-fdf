@@ -24,9 +24,8 @@
 # define WIN_MAX_SIZE (WIN_SIZE_X > WIN_SIZE_Y ? WIN_SIZE_X : WIN_SIZE_Y)
 # define WIN_NAME "fdf"
 # define DEFAULT_COLOR 0xffffff
-# define X_OFF 5
-# define Y_OFF 5
-
+# define X_OFF 400
+# define Y_OFF 400
 /*
 ** For the sake of arrays,
 ** x or y == -1 means the end of the array.
@@ -37,6 +36,8 @@ typedef struct	s_vector
 	double x;
 	double y;
 	double z;
+	int px;
+	int py;
 	int wall;
 	int color;
 }				t_vector;
@@ -63,5 +64,6 @@ t_vector *splittovect(char **split, int ind);
 t_map	*initmap(int *fd, char *file);
 t_vector new_wall_vect(void);
 
+int gradient(int v1, int v2, int pos);
 
 #endif
