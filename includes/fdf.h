@@ -19,14 +19,13 @@
 # include <fcntl.h>
 # include <mlx.h>
 
-# define WIN_SIZE_X 800
-# define WIN_SIZE_Y 600
+# define WIN_SIZE_X 1280
+# define WIN_SIZE_Y 720
 # define WIN_MAX_SIZE (WIN_SIZE_X > WIN_SIZE_Y ? WIN_SIZE_X : WIN_SIZE_Y)
 # define WIN_NAME "fdf"
 # define DEFAULT_COLOR 0xffffff
-# define MAP_SCALE 25
-# define X_OFF 200
-# define Y_OFF 200
+# define X_OFF 5
+# define Y_OFF 5
 
 /*
 ** For the sake of arrays,
@@ -35,9 +34,10 @@
 
 typedef struct	s_vector
 {
-	int x;
-	int y;
-	int z;
+	double x;
+	double y;
+	double z;
+	int wall;
 	int color;
 }				t_vector;
 
@@ -45,9 +45,9 @@ typedef struct	s_map
 {
 	void *mlxp;
 	void *winp;
-	int rx;
-	int ry;
-	int rz;
+	double rx;
+	double ry;
+	double rz;
 	double scale;
 	int xo;
 	int yo;
@@ -58,9 +58,10 @@ void		put_fdf(char *file);
 t_vector	**get_map(int fd);
 void		mapdel(char ***map);
 void putline(t_map *map, t_vector v1, t_vector v2);
-t_vector	new_vect(int x, int y, int z, int *color);
+t_vector new_vect(double x, double y, double z, int *color);
 t_vector *splittovect(char **split, int ind);
 t_map	*initmap(int *fd, char *file);
+t_vector new_wall_vect(void);
 
 
 #endif
