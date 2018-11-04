@@ -17,7 +17,10 @@ SRC_RAW = 	main \
 			fdf \
 			err \
 			maputil \
-			vector
+			vector \
+			keyfuncts \
+			fdf_io \
+			colors
 
 SRC = $(SRC_RAW:%=$(SRC_DIR)%.c)
 SRC_DIR = src/

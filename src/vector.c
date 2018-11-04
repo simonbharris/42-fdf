@@ -1,4 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sharris <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/11/03 20:21:24 by sharris           #+#    #+#             */
+/*   Updated: 2018/11/03 20:21:25 by sharris          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fdf.h>
+
+#define ROT_MIN(vx, vy, map) cos(map) * vx - sin(map) * vy
+#define ROT_PLUS(vx, vy, map) cos(map) * vx + sin(map) * vy
 
 /*
 **	typedef struct	s_vector
@@ -24,28 +39,42 @@
 // }
 
 /*
-	iso:
-	vect.x = x * 1.8 * SCALE;
-	vect.y = y * 1.4 * SCALE;
-	vect.z = z * 1.5;
+** new_vect
+** Initializes a new t_vector and scales values accordingly.
 */
 
 t_vector new_vect(double x, double y, double z, int *color)
 {
 	t_vector vect;
 
-	if (z == 0)
-		z = 0.0001;
-	vect.x = x * 1.8 * 1.4;
-	vect.y = y * 1.5 * 1.4;
-	vect.z = z * 1.5;
-	vect.wall = 0;
-	if (color == NULL)
-		vect.color = 0xb7410e;
-	else
+	if (color)
 		vect.color = *color;
+	else if (z <= 0)
+	{
+		if (z == 0)
+			z = 1;
+		vect.color = 0xff;
+	}
+	else if (z <= 1)
+	{
+		z = 0.0001;
+		vect.color = 0xc2b280;
+	}
+	else if (z < 10)
+		vect.color = gradient(0xc2b280, 0xffebcd, z/10);
+	else 
+		vect.color = 0xffffff;
+	vect.x = x;
+	vect.y = y;
+	vect.z = z * .7;
+	vect.wall = 0;
 	return(vect);
 }
+
+/*
+** new_wall_vect
+** used to signify a teminated for t_vect arrays.
+*/
 
 t_vector new_wall_vect(void)
 {
@@ -53,5 +82,27 @@ t_vector new_wall_vect(void)
 
 	vect = new_vect(0, 0, 0, NULL);
 	vect.wall = 1;
-	return (vect);	
+	return (vect);
+}
+
+t_vector rotate_vect(t_map map, t_vector v1)
+{
+	t_vector v = v1;
+	// v = new_vect(cos(map.rxy) * v.x - sin(map.rxy) * v.y, (cos(map.rxy) * v.y + sin(map.rxy) * v.x), v.z, &v.color);
+	// v = new_vect(cos(RXZ) * v.x - sin(RXZ) * v.z, v.y, cos(RXZ) * v.x + sin(RXZ) * v.z, &v.color);
+	// v = new_vect(v.x, cos(RYZ) * v.y - sin(RYZ) * v.z, cos(RYZ) * v.z + sin(RYZ) * v.y, &v.color);
+	v = new_vect(ROT_MIN(v.x, v.y, map.rxy), ROT_PLUS(v.y, v.x, map.rxy), v.z,
+		&v.color);
+	v = new_vect(ROT_PLUS(v.x, v.z, map.rxz), v.y, ROT_MIN(v.z, v.x, map.rxz),
+		&v.color);
+	v = new_vect(v.x, ROT_PLUS(v.y, v.z, map.ryz), ROT_MIN(v.z, v.y, map.ryz),
+		&v.color);
+	return(new_vect(v.x, v.y, v.z, &v.color));
+}
+
+t_vector setpos(t_vector v, t_map map)
+{
+	v.px = (v.x * map.scale) + map.xo;
+	v.py = (v.y * map.scale) + map.yo;
+	return (v);
 }
