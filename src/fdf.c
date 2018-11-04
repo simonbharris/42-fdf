@@ -11,17 +11,11 @@
 /* ************************************************************************** */
 
 #include <fdf.h>
-#include <get_next_line.h>
 
 //! REMOVE 
 #include <stdio.h>
 
-#define TWIDTH 20
-
-#define POSX(x,z) (x / z)
-#define POSY(y,z) (y / z)
 #define SCALE_PTS(x1, x2, i) (x1) + (x2 - x1) * i
-#define Z(x) ((x).z == 0 ? 0.01 : (x).z)
 
 /*
 ** printmap
@@ -34,6 +28,7 @@ void	printmap(t_map *map)
 	int i = 0;
 	int j = 0;
 
+	mlx_clear_window(map->mlxp, map->winp);
 	while (map->vects[i])
 	{
 		j = 0;
@@ -79,6 +74,13 @@ void putline(t_map *map, t_vector v1, t_vector v2)
 	}
 }
 
+int		close_fdf(void *param)
+{
+	(void)param;
+	exit(0);
+	return(0);
+}
+
 void	put_fdf(char *file)
 {
 	int i;
@@ -92,6 +94,7 @@ void	put_fdf(char *file)
 
 	close(fd);
 	mlx_key_hook(map->winp, deal_key, map);
+	mlx_hook(map->winp, 17, 1L << 17, close_fdf, NULL);
 	mlx_loop(map->mlxp);
 
 }

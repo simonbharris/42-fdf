@@ -12,42 +12,28 @@
 
 #include <fdf.h>
 
-#define ROT_SPD .1
+static int		(*keyfuncts[])(t_map *) = { &close_fdf,
+	&decrementrxy, &decrementryz, &decrementrxz,
+	&incrementrxy, &incrementryz, &incrementrxz,
+	&pane_up, &pane_left, &pane_down, &pane_right,
+	&scale_up, &scale_down};
+static char		keyvals[14][6] = { { "65307"},
+	{ "113" }, { "119" }, { "97" },
+	{ "101" }, { "115" }, { "100" },
+	{ "65362" }, { "65361" }, { "65364" }, { "65363" },
+	{ "45" }, { "61" }, 0 };
 
-int			close_fdf(t_map *map);
-int			incrementrxy(t_map *map);
-int			incrementryz(t_map *map);
-int			incrementrxz(t_map *map);
-
-static int		(*keyfuncts[])(t_map *) = { &close_fdf, &incrementrxy, &incrementryz, &incrementrxz };
-static char		keyvals[5][6] = { { "65307"}, { "122" }, { "120" }, { "99" }, 0 };
-
-int			close_fdf(t_map *map)
-{
-	free(map);
-	exit(0);
-}
-
-int			incrementrxy(t_map *map)
-{
-	map->rxy += ROT_SPD;
-	mlx_clear_window(map->mlxp, map->winp);
-	printmap(map);
-}
-
-int			incrementryz(t_map *map)
-{
-	map->ryz += ROT_SPD;
-	mlx_clear_window(map->mlxp, map->winp);
-	printmap(map);
-}
-
-int			incrementrxz(t_map *map)
-{
-	map->rxz += ROT_SPD;
-	mlx_clear_window(map->mlxp, map->winp);
-	printmap(map);
-}
+/*
+** Keys:
+** Close
+** ESC = 65307
+**
+** Rotate
+** Q = 113 | W = 119 | A =  97 >> - (XY | YZ | XZ)
+** E = 101 | S = 115 | D = 100 >> + (XY | YZ | XZ)
+** UP = 65362 | LEFT = 65362 | DOWN = 65362 | RIGHT = 65362 >> Pane in direction
+** '-' = 45 | '+' = 61 >> Scale Up/down
+*/
 
 int			get_strind(char *str)
 {
@@ -66,7 +52,7 @@ int			get_strind(char *str)
 
 int			deal_key(int key, void *params)
 {
-    // printf("Key No. Pressed: %d\n", key);
+    printf("Key No. Pressed: %d\n", key);
 	int ret;
 	char *skey;
 

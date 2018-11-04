@@ -19,13 +19,25 @@
 # include <fcntl.h>
 # include <mlx.h>
 
+/*
+** Meta-data for window
+*/
+
 # define WIN_SIZE_X 1280
 # define WIN_SIZE_Y 720
 # define WIN_MAX_SIZE (WIN_SIZE_X > WIN_SIZE_Y ? WIN_SIZE_X : WIN_SIZE_Y)
 # define WIN_NAME "fdf"
-# define DEFAULT_COLOR 0xffffff
+
+/*
+** Map defaults
+*/
+
+#define ROT_SPD .1
+#define PANE_SPD 10
 # define X_OFF 200
 # define Y_OFF 200
+# define DEFAULT_COLOR 0xffffff
+
 /*
 ** For the sake of arrays,
 ** x or y == -1 means the end of the array.
@@ -74,6 +86,21 @@ void	printmap(t_map *map);
 ** Keyhook fucnts
 */
 int				deal_key(int key, void *params);
+
+int			pane_right(t_map *map);
+int			pane_left(t_map *map);
+int			pane_down(t_map *map);
+int			pane_up(t_map *map);
+int			decrementrxy(t_map *map);
+int			decrementryz(t_map *map);
+int			decrementrxz(t_map *map);
+int			incrementrxy(t_map *map);
+int			incrementryz(t_map *map);
+int			incrementrxz(t_map *map);
+int			scale_up(t_map *map);
+int			scale_down(t_map *map);
+int			close_fdf(void *params);
+
 
 int				gradient(int start, int end, double perc);
 

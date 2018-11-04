@@ -36,6 +36,20 @@ int	ft_openfile(char *file)
 	return (fd);
 }
 
+int get_node_count(char *line)
+{
+	int n;
+
+	n = 0;
+	while (line && *line)
+	{
+		if (*line && !ft_iswhitespace(n))
+			n++;
+		line = ft_strchr(line, ' ') + 1;
+	}
+	return(n);
+}
+
 /*
 ** get_filelc (get file line count)
 ** Opens and reads through a file, returning the number of time that it read.
