@@ -20,7 +20,11 @@ SRC_RAW = 	main \
 			vector \
 			keyfuncts \
 			fdf_io \
-			colors
+			colors \
+			pane_map \
+			rotatedown_map \
+			rotateup_map \
+			scale_map
 
 SRC = $(SRC_RAW:%=$(SRC_DIR)%.c)
 SRC_DIR = src/
