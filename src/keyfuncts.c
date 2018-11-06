@@ -13,13 +13,13 @@
 #include <fdf.h>
 
 static int		(*keyfuncts[])(t_map *) = { &close_fdf,
-	&decrementrxy, &decrementryz, &decrementrxz,
 	&incrementrxy, &incrementryz, &incrementrxz,
+	&decrementrxy, &decrementryz, &decrementrxz,
 	&pane_up, &pane_left, &pane_down, &pane_right,
 	&scale_up, &scale_down};
 static char		keyvals[14][6] = { { "65307"},
-	{ "113" }, { "119" }, { "97" },
-	{ "101" }, { "115" }, { "100" },
+	{ "101" }, { "119" }, { "97" },
+	{ "113" }, { "115" }, { "100" },
 	{ "65362" }, { "65361" }, { "65364" }, { "65363" },
 	{ "45" }, { "61" }, 0 };
 
@@ -28,10 +28,11 @@ static char		keyvals[14][6] = { { "65307"},
 ** Close
 ** ESC = 65307
 **
-** Rotate
-** Q = 113 | W = 119 | A =  97 >> - (XY | YZ | XZ)
-** E = 101 | S = 115 | D = 100 >> + (XY | YZ | XZ)
-** UP = 65362 | LEFT = 65362 | DOWN = 65362 | RIGHT = 65362 >> Pane in direction
+** Rotate					   >>   Rotated plane
+** E = 101 | W = 119 | A =  97 >> + (XY | YZ | XZ)
+** Q = 113 | S = 115 | D = 100 >> - (XY | YZ | XZ)
+** Pane
+** UP = 65362 | LEFT = 65362 | DOWN = 65362 | RIGHT = 65362
 ** '-' = 45 | '+' = 61 >> Scale Up/down
 */
 
@@ -46,19 +47,28 @@ int			get_strind(char *str)
 			return (i);
 		i++;
 	}
-	printf("Returning -1\n");
 	return (-1);
 }
 
 int			deal_key(int key, void *params)
 {
-    printf("Key No. Pressed: %d\n", key);
 	int ret;
 	char *skey;
 
-	skey = ft_itoa(key);
+	if (NULL == (skey = ft_itoa(key)))
+	{
+		ft_putendl("Malloc failed (deal_key)");
+		exit(7);
+	}
 	if ((ret = get_strind(skey)) != -1)
 		keyfuncts[ret]((t_map *)params);
 	free (skey);
     return(0);
+}
+
+int		close_fdf(t_map *map)
+{
+	(void)map;
+	exit(0);
+	return(0);
 }

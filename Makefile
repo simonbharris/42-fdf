@@ -61,7 +61,7 @@ mkdir : $(OBJ_DIR)
 
 # ! -########################  Replace SRC_RAW with OBJ equivalent
 $(NAME): $(OBJ_DIR) $(LIBFT) $(MLX_LIB) $(OBJ)
-	$(CC) -g $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(OBJ) -o $(NAME)
+	$(CC) $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(OBJ) -o $(NAME)
 
 $(OBJ): $(OBJ_DIR)%.o : $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) $(INC_FLAG) $(LIBFT_INC_FLAG) $< -o $@

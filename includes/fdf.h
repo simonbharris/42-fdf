@@ -32,12 +32,32 @@
 ** Map defaults
 */
 
-#define ROT_SPD .1
-#define PANE_SPD 10
-# define X_OFF 200
-# define Y_OFF 200
+#define ROT_SPD .3
+#define PANE_SPD 25
+# define X_OFF WIN_SIZE_X / 2
+# define Y_OFF WIN_SIZE_Y / 2
 # define DEFAULT_COLOR 0xffffff
 
+/*
+** Fun stuff
+** Any original z value below RAINBOWMIN will be red.
+** RAINBOW_SPREAD The lower the value, the greater the color range.
+** Aim to set this so that all values in file multiplied by this value will
+** 		have a difference no greater than 100 from min and max resulting values.
+**
+** Results below the minimum will be red, above the max is white.
+** Note, color specified in a file always overrides.
+*/
+
+#define USE_RAINBOW 1
+#define RAINBOW_MIN 0
+#define RAINBOW_SPREAD 2
+
+/*
+** ZSCALE affects the perceived depth, value scales with the magnitude of depth.
+*/
+
+# define ZSCALE .5
 /*
 ** For the sake of arrays,
 ** x or y == -1 means the end of the array.
@@ -45,9 +65,9 @@
 
 typedef struct	s_vector
 {
-	double x;
-	double y;
-	double z;
+	float x;
+	float y;
+	float z;
 	int px;
 	int py;
 	int wall;
@@ -58,12 +78,14 @@ typedef struct	s_map
 {
 	void *mlxp;
 	void *winp;
-	double rxy;
-	double ryz;
-	double rxz;
-	double scale;
+	float rxy;
+	float ryz;
+	float rxz;
+	float scale;
 	int xo;
 	int yo;
+	int xmid;
+	int ymid;
 	t_vector **vects;
 }				t_map;
 
@@ -76,11 +98,13 @@ t_vector		new_vect(double x, double y, double z, int *color);
 t_map			*initmap(int *fd, char *file);
 t_vector		new_wall_vect(void);
 int				ft_openfile(char *file);
-int				get_filelc(char *filename);
+int				get_filelc(char *filename, t_map *map);
 t_vector rotate_vect(t_map map, t_vector v1);
 t_vector setpos(t_vector v, t_map map);
-t_vector	**get_vectors(int fd, int maxlines, t_map map);
+t_vector	**get_vectors(int fd, int maxlines, t_map *map);
 void	printmap(t_map *map);
+void	init_map_window(t_map *map);
+void	put_guide(t_map *map);
 
 /*
 ** Keyhook fucnts
@@ -99,7 +123,7 @@ int			incrementryz(t_map *map);
 int			incrementrxz(t_map *map);
 int			scale_up(t_map *map);
 int			scale_down(t_map *map);
-int			close_fdf(void *params);
+int		close_fdf(t_map *map);
 
 
 int				gradient(int start, int end, double perc);

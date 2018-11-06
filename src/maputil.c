@@ -37,15 +37,36 @@ t_map	*initmap(int *fd, char *file)
 {
 	t_map *map;
 
-	map = (t_map *)malloc(sizeof(t_map));
-	map->mlxp = mlx_init();
-	map->winp = mlx_new_window(map->mlxp, WIN_SIZE_X, WIN_SIZE_Y, WIN_NAME);
-	map->rxy = 0;
-	map->ryz = 0;
+	if (NULL == (map = (t_map *)malloc(sizeof(t_map))))
+	{
+		ft_putendl("Malloc failed (initmap)");
+		exit(5);
+	}
+	map->rxy = -.6;
+	map->ryz = .6;
 	map->rxz = 0;
 	map->scale = 10;
 	map->xo = X_OFF;
 	map->yo = Y_OFF;
 	map->vects = NULL;
 	return (map);
+}
+
+void	init_map_window(t_map *map)
+{
+	if (NULL == (map->mlxp = mlx_init()))
+	{
+		ft_putendl("Error; MLX Init returned NULL... Exiting.");
+		free(map);
+		exit(3);
+	}
+	map->winp = mlx_new_window(map->mlxp, WIN_SIZE_X, WIN_SIZE_Y, WIN_NAME);
+}
+
+void	put_guide(t_map *map)
+{
+	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X -120, 12, 0xffffff, "Rotate: WASD + QE");
+	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X -120, 12 * 2, 0xffffff, "Pane: Arrow keys");
+	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X -120, 12 * 3, 0xffffff, "Scale: '-' '+'");
+	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X -120, 12 * 4, 0xffffff, "Close: ESC");
 }

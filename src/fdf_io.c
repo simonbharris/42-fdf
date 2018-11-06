@@ -43,9 +43,16 @@ int get_node_count(char *line)
 	n = 0;
 	while (line && *line)
 	{
-		if (*line && !ft_iswhitespace(n))
+		while (*line && ft_iswhitespace(*line))
+			line++;
+		if (*line && !(ft_isdigit(*line) || *line == '-' || *line == '+'))
+		{
+			ft_putendl("Error: Invalid character in input file.");
+			exit(8);
+		}
+		if (*line && !ft_iswhitespace(*line))
 			n++;
-		line = ft_strchr(line, ' ') + 1;
+		line = ft_strchr(line, ' ');
 	}
 	return(n);
 }
@@ -54,21 +61,39 @@ int get_node_count(char *line)
 ** get_filelc (get file line count)
 ** Opens and reads through a file, returning the number of time that it read.
 ** as a line-count. Useful for knowing how much to malloc.
+** Also finds the middle of the map and stores it in the struct.
 */
 
-int get_filelc(char *filename)
+int get_filelc(char *filename, t_map *map)
 {
 	char *line;
 	int fd;
 	int i;
+	int n;
 
+	n = -2;
+	i = 0;
 	fd = open(filename, O_RDONLY);
 	while (get_next_line(fd, &line) == 1)
 	{
-		free(line);
-		i++;
+		if (n == -2)
+			n = get_node_count(line);
+		else
+		{
+			if (n != get_node_count(line))
+			{
+				free(line);
+				ft_putendl("Error, Number of line elemnts in file are not consistent. Exiting...");
+				exit(4);
+			}
+			free(line);
+			i++;
+		}
+
 	}
 	close(fd);
+	map->xmid = n / 2;
+	map->ymid = i / 2;
 	return(i);
 }
 
@@ -90,12 +115,13 @@ static t_vector *splittovect(char **split, int ind, t_map map)
 	i = 0;
 	vects = (t_vector *)malloc(sizeof(t_vector)
 		* (ft_parrlen((void **)split) + 1));
+	printf("%d -- %d map xy mid\n", map.xmid, map.ymid);
 	while (split[i])
 	{
 		if ((tmp = ft_strchr(split[i], ',')))
 			col = (int)ft_hextoi(tmp + 1);
-		vects[i] = new_vect(i, ind,
-			ft_atoi(split[i]), tmp == NULL ? NULL : &col);
+		vects[i] = new_vect((i - map.xmid), (ind - map.ymid),
+			(double)ft_atoi(split[i]) * ZSCALE, tmp == NULL ? NULL : &col);
 		i++;
 	}
 	vects[i] = new_wall_vect();
@@ -112,17 +138,17 @@ static t_vector *splittovect(char **split, int ind, t_map map)
 ** a combination of the two indicies represents their position in the fdf grid.
 */
 
-t_vector	**get_vectors(int fd, int maxlines, t_map map)
+t_vector	**get_vectors(int fd, int maxlines, t_map *map)
 {
 	t_vector	**vects;
 	char		*line;
 	int			i;
 
 	i = 0;
-	vects = (t_vector **)ft_memalloc(sizeof(t_vector *) * maxlines);
+	vects = (t_vector **)ft_memalloc(sizeof(t_vector *) * maxlines + 1);
 	while (i < maxlines && get_next_line(fd, &line))
 	{
-		vects[i] = splittovect(ft_strsplit(line, ' '), i, map);
+		vects[i] = splittovect(ft_strsplit(line, ' '), i, *map);
 		free(line);
 		i++;
 	}

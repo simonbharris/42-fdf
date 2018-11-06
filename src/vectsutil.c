@@ -1,34 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rotateup_map.c                                     :+:      :+:    :+:   */
+/*   vectsutil.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sharris <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/06 00:53:43 by sharris           #+#    #+#             */
-/*   Updated: 2018/11/06 00:53:44 by sharris          ###   ########.fr       */
+/*   Created: 2018/11/05 03:53:26 by sharris           #+#    #+#             */
+/*   Updated: 2018/11/05 03:53:26 by sharris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fdf.h>
 
-int			incrementrxy(t_map *map)
+void	vect_iter(t_map *map, void (*f)(t_vector *))
 {
-	map->rxy += ROT_SPD;
-	printmap(map);
-	return(0);
+	int i;
+	int j;
+
+	i = 0;
+	while (map->vects[i] && map->vects[i][0].wall != 1)
+	{
+		j = 0;
+		while (map->vects[i][j].wall != 1)
+		{
+			f(&(map->vects[i][j]));
+			j++;
+		}
+		i++;
+	}
 }
 
-int			incrementryz(t_map *map)
+void panev_up(t_vector *v)
 {
-	map->ryz += ROT_SPD;
-	printmap(map);
-	return(0);
+	v->y -= PANE_SPD;
 }
 
-int			incrementrxz(t_map *map)
+void panev_down(t_vector *v)
 {
-	map->rxz += ROT_SPD;
-	printmap(map);
-	return(0);
+	v->y += PANE_SPD;
 }
+
+void panev_left(t_vector *v)
+{
+	v->x -= PANE_SPD;
+}
+
+void panev_right(t_vector *v)
+{
+	v->x += PANE_SPD;
+}
+
