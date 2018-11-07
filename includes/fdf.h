@@ -40,27 +40,31 @@
 
 /*
 ** Fun stuff
-** Any original z value below RAINBOWMIN will be red.
+** Any original z value below RAINBOW_MIN will be red.
 ** RAINBOW_SPREAD The lower the value, the greater the color range.
 ** Aim to set this so that all values in file multiplied by this value will
 ** 		have a difference no greater than 100 from min and max resulting values.
-**
+**		NOTE: ZSCALE (below) Will affect the perceived color range.
 ** Results below the minimum will be red, above the max is white.
-** Note, color specified in a file always overrides.
+** NOTE: color specified in a file always overrides these colors.
 */
 
 #define USE_RAINBOW 1
-#define RAINBOW_MIN 0
-#define RAINBOW_SPREAD 2
+#define RAINBOW_MIN -5
+#define RAINBOW_SPREAD 20
 
 /*
 ** ZSCALE affects the perceived depth, value scales with the magnitude of depth.
 */
 
-# define ZSCALE .5
+# define ZSCALE .25
+
 /*
-** For the sake of arrays,
-** x or y == -1 means the end of the array.
+** s_vector
+** xyz -- Positions of the 3d vector.
+** px, py -- Screen position.
+** wall -- Used to null-terminate arrays.
+** color -- Color of the vector point.
 */
 
 typedef struct	s_vector
@@ -73,6 +77,15 @@ typedef struct	s_vector
 	int wall;
 	int color;
 }				t_vector;
+
+/*
+** s_map
+** mlxp, winp -- MLX pointers for the rendered map.
+** r[xy|yz|xz] -- rotation values.
+** scale -- scale of hte map, higher values == larger rendered map.
+** xo | yo -- x and y origin, used as a point to print the map from.
+** xmid | ymid -- Stores the middle of vector arrays for rotation purposes.
+*/
 
 typedef struct	s_map
 {
@@ -95,7 +108,7 @@ t_vector		**get_map(int fd);
 void			mapdel(char ***map);
 void			putline(t_map *map, t_vector v1, t_vector v2);
 t_vector		new_vect(double x, double y, double z, int *color);
-t_map			*initmap(int *fd, char *file);
+t_map			*initmap(char *file);
 t_vector		new_wall_vect(void);
 int				ft_openfile(char *file);
 int				get_filelc(char *filename, t_map *map);
@@ -105,6 +118,8 @@ t_vector	**get_vectors(int fd, int maxlines, t_map *map);
 void	printmap(t_map *map);
 void	init_map_window(t_map *map);
 void	put_guide(t_map *map);
+int				gradient(int start, int end, double perc);
+int rainbow_gradient(int i);
 
 /*
 ** Keyhook fucnts
@@ -123,9 +138,16 @@ int			incrementryz(t_map *map);
 int			incrementrxz(t_map *map);
 int			scale_up(t_map *map);
 int			scale_down(t_map *map);
-int		close_fdf(t_map *map);
+int			close_fdf(t_map *map);
 
+/*
+** Errors
+** All error_fdf_* functions cause an exit.
+*/
 
-int				gradient(int start, int end, double perc);
+void	error_fdf_line_elements(void);
+void	error_fdf_type(void);
+void	error_fdf_fileopen(void);
+void	error_fdf_read(void);
 
 #endif
