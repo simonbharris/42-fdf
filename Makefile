@@ -63,7 +63,7 @@ mkdir : $(OBJ_DIR)
 $(NAME): $(OBJ_DIR) $(LIBFT) $(MLX_LIB) $(OBJ)
 	$(CC) $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(OBJ) -o $(NAME)
 
-$(OBJ): $(OBJ_DIR)%.o : $(SRC_DIR)%.c
+$(OBJ): $(OBJ_DIR)%.o : $(SRC_DIR)%.c $(HEADER)
 	$(CC) $(CFLAGS) $(INC_FLAG) $(LIBFT_INC_FLAG) $< -o $@
 
 $(LIBFT):
