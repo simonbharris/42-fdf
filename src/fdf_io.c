@@ -18,25 +18,27 @@
 ** either exits the program with an error to stdout or returns a filedes (fd);
 */
 
-int	ft_openfile(char *file)
+int				ft_openfile(char *file)
 {
-	int fd;
+	int		fd;
+	char	*hold;
 
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-	{
-		ft_putendl("Error opening file.");
-		exit(1);
-	}
+	if (NULL == (hold = ft_strstr(file, ".fdf")) || hold[4] != '\0')
+		error_fdf_type();
+	if ((fd = open(file, O_RDONLY)) < 0)
+		error_fdf_fileopen();
 	if (read(fd, NULL, 0) < 0)
-	{
-		ft_putendl("File could not be read.");
-		exit(2);
-	}
+		error_fdf_read();
 	return (fd);
 }
 
-int get_node_count(char *line)
+/*
+** get_node_count
+** Gets the number of "nodes" within a line of GNL
+** Also does osme basic validation.
+*/
+
+int				get_node_count(char *line)
 {
 	int n;
 
@@ -54,7 +56,7 @@ int get_node_count(char *line)
 			n++;
 		line = ft_strchr(line, ' ');
 	}
-	return(n);
+	return (n);
 }
 
 /*
@@ -64,12 +66,12 @@ int get_node_count(char *line)
 ** Also finds the middle of the map and stores it in the struct.
 */
 
-int get_filelc(char *filename, t_map *map)
+int				get_filelc(char *filename, t_map *map)
 {
-	char *line;
-	int fd;
-	int i;
-	int n;
+	char	*line;
+	int		fd;
+	int		i;
+	int		n;
 
 	n = -2;
 	i = 0;
@@ -81,41 +83,36 @@ int get_filelc(char *filename, t_map *map)
 		else
 		{
 			if (n != get_node_count(line))
-			{
-				free(line);
-				ft_putendl("Error, Number of line elemnts in file are not consistent. Exiting...");
-				exit(4);
-			}
-			free(line);
+				error_fdf_line_elements();
 			i++;
 		}
-
+		free(line);
 	}
 	close(fd);
 	map->xmid = n / 2;
 	map->ymid = i / 2;
-	return(i);
+	return (i);
 }
 
 /*
 ** splittovect (ft_split output to *t_vectors)
-** Takes a char** from an ft_split function and an index of the specified line to convert.
+** Takes a char** from an ft_split function and an
+** index of the specified line to convert.
 ** Converts that "line" into an array of t_vectors and returns it.
 ** Frees up ft_split afterwards.
 */
 
-static t_vector *splittovect(char **split, int ind, t_map map)
+static t_vector	*splittovect(char **split, int ind, t_map map)
 {
-	int i;
-	int len;
-	char *tmp;
-	int col;
-	t_vector *vects;
+	int			i;
+	int			len;
+	char		*tmp;
+	int			col;
+	t_vector	*vects;
 
 	i = 0;
 	vects = (t_vector *)malloc(sizeof(t_vector)
 		* (ft_parrlen((void **)split) + 1));
-	printf("%d -- %d map xy mid\n", map.xmid, map.ymid);
 	while (split[i])
 	{
 		if ((tmp = ft_strchr(split[i], ',')))
@@ -129,7 +126,7 @@ static t_vector *splittovect(char **split, int ind, t_map map)
 	while (split[i])
 		free(split[i++]);
 	free(split);
-	return(vects);
+	return (vects);
 }
 
 /*
@@ -138,14 +135,14 @@ static t_vector *splittovect(char **split, int ind, t_map map)
 ** a combination of the two indicies represents their position in the fdf grid.
 */
 
-t_vector	**get_vectors(int fd, int maxlines, t_map *map)
+t_vector		**get_vectors(int fd, int maxlines, t_map *map)
 {
 	t_vector	**vects;
 	char		*line;
 	int			i;
 
 	i = 0;
-	vects = (t_vector **)ft_memalloc(sizeof(t_vector *) * maxlines + 1);
+	vects = (t_vector **)ft_memalloc(sizeof(t_vector *) * (maxlines + 1));
 	while (i < maxlines && get_next_line(fd, &line))
 	{
 		vects[i] = splittovect(ft_strsplit(line, ' '), i, *map);
@@ -153,5 +150,5 @@ t_vector	**get_vectors(int fd, int maxlines, t_map *map)
 		i++;
 	}
 	vects[i] = NULL;
-	return(vects);
+	return (vects);
 }
