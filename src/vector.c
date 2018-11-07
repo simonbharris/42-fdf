@@ -64,24 +64,7 @@
 ** Initializes a new t_vector and scales values accordingly.
 */
 
-int rainbow_gradient(int i)
-{
-	int color;
 
-	if (i < 25)
-		color = gradient(0xff0000, 0xffff00, (float)i * 4 / 100);
-	else if ( i < 25 * 2)
-		color = gradient(0xffff00, 0x00ff00, (float)(i - 25) * 4 / 100);
-	else if ( i < 25 * 3)
-		color = gradient(0x00ff00, 0x00ffff, (float)(i - 25 * 2) * 4 / 100);
-	else if ( i < 25 * 4)
-		color = gradient(0x00ffff, 0x0000ff, (float)(i - 25 * 3) * 4 / 100);
-	else if ( i < 25 * 5)
-		color = gradient(0x0000ff, 0xff00ff, (float)(i - 25 * 4) * 4 / 100);
-	else
-		color = 0xffffff;
-	return(color);		
-}
 
 t_vector new_vect(double x, double y, double z, int *color)
 {

@@ -12,9 +12,6 @@
 
 #include <fdf.h>
 
-//! REMOVE 
-#include <stdio.h>
-
 #define SCALE_PTS(x1, x2, i) (x1) + (x2 - x1) * i
 
 /*
@@ -24,13 +21,14 @@
 ** Uses two t_vectors to store results of setpos for some optimizing.
 */
 
-void	printmap(t_map *map)
+void			printmap(t_map *map)
 {
-	int i = 0;
-	int j = 0;
-	t_vector v1;
-	t_vector v2;
-	
+	int			i;
+	int			j;
+	t_vector	v1;
+	t_vector	v2;
+
+	i = 0;
 	mlx_clear_window(map->mlxp, map->winp);
 	while (map->vects[i])
 	{
@@ -43,7 +41,7 @@ void	printmap(t_map *map)
 			if (map->vects[i + 1])
 				putline(map, v1, setpos(map->vects[i + 1][j], *map));
 			if (map->vects[i][j + 1].wall != 1)
-				putline(map, v1, (v2 = setpos(map->vects[i][j+1], *map)));
+				putline(map, v1, (v2 = setpos(map->vects[i][j + 1], *map)));
 			j++;
 		}
 		i++;
@@ -53,19 +51,19 @@ void	printmap(t_map *map)
 
 /*
 ** putline
-** 
+** A loop that draws a pixel line between two vectors.
+** Does not draw lines whos points fall too far outside the window.
+** The line draws a gradient of the two colors between v1 and v2.
 */
 
-
-void putline(t_map *map, t_vector v1, t_vector v2)
+void			putline(t_map *map, t_vector v1, t_vector v2)
 {
 	double i;
 	double hyp;
-	
+
 	i = 0;
-	if (fmin(v1.px, v2.px) > WIN_SIZE_X || fmin(v1.py, v2.py) > WIN_SIZE_Y || fmax(v1.px, v2.px) < 0 || fmax(v1.py, v2.py) < 0)
-		return ;
-	if (abs(v1.px) > WIN_SIZE_X * 2 || abs(v1.py) > WIN_SIZE_Y * 2) 
+	if (fmin(v1.px, v2.px) > WIN_SIZE_X || fmin(v1.py, v2.py) > WIN_SIZE_Y
+	|| fmax(v1.px, v2.px) < 0 || fmax(v1.py, v2.py) < 0)
 		return ;
 	hyp = sqrt(pow(v1.px - v2.px, 2) + pow(v1.py - v2.py, 2));
 	while (i < 1)
@@ -78,21 +76,25 @@ void putline(t_map *map, t_vector v1, t_vector v2)
 	}
 }
 
+/*
+** put_fdf
+** Opens, intiializes, and obtains the vectors from the input file.
+** prints the map, then initializes the key hooks and wait for user input.
+*/
 
-void	put_fdf(char *file)
+void			put_fdf(char *file)
 {
-	int i;
-	int fd;
-	t_map *map;
-	
+	int		i;
+	int		fd;
+	t_map	*map;
+
 	fd = ft_openfile(file);
-	map = initmap(&fd, file);
-	map->vects = get_vectors(fd = ft_openfile(file), get_filelc(file, map) + 1, map);
+	map = initmap(file);
+	map->vects = get_vectors(fd, get_filelc(file, map) + 1, map);
+	close(fd);
 	init_map_window(map);
 	printmap(map);
-	close(fd);
 	mlx_key_hook(map->winp, deal_key, map);
 	mlx_hook(map->winp, 17, 1L << 17, close_fdf, NULL);
 	mlx_loop(map->mlxp);
-
 }
