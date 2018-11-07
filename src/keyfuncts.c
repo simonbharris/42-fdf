@@ -12,17 +12,6 @@
 
 #include <fdf.h>
 
-static int		(*keyfuncts[])(t_map *) = { &close_fdf,
-	&incrementrxy, &incrementryz, &incrementrxz,
-	&decrementrxy, &decrementryz, &decrementrxz,
-	&pane_up, &pane_left, &pane_down, &pane_right,
-	&scale_up, &scale_down};
-static char		keyvals[14][6] = { { "65307"},
-	{ "101" }, { "119" }, { "97" },
-	{ "113" }, { "115" }, { "100" },
-	{ "65362" }, { "65361" }, { "65364" }, { "65363" },
-	{ "45" }, { "61" }, 0 };
-
 /*
 ** Keys:
 ** Close
@@ -36,12 +25,23 @@ static char		keyvals[14][6] = { { "65307"},
 ** '-' = 45 | '+' = 61 >> Scale Up/down
 */
 
-int			get_strind(char *str)
+/*
+** get_strind (Get string index)
+** Gets the index of a key code to use with a function array to
+** link the proper function with the key.
+*/
+
+int		get_strind(char *str)
 {
-	int i;
-	
+	int			i;
+	const char	keyvals[14][6] = { { "65307"},
+	{ "101" }, { "119" }, { "97" },
+	{ "113" }, { "115" }, { "100" },
+	{ "65362" }, { "65361" }, { "65364" }, { "65363" },
+	{ "45" }, { "61" }, 0 };
+
 	i = 0;
-	while(keyvals[i][0])
+	while (keyvals[i][0])
 	{
 		if (ft_strequ(keyvals[i], str))
 			return (i);
@@ -50,25 +50,61 @@ int			get_strind(char *str)
 	return (-1);
 }
 
-int			deal_key(int key, void *params)
-{
-	int ret;
-	char *skey;
+/*
+** initkeys
+** Initializes the funciton pointer array
+** to use as a dispatching table.
+*/
 
+void	initkeys(void *keys[13])
+{
+	keys[0] = &close_fdf;
+	keys[1] = &incrementrxy;
+	keys[2] = &incrementryz;
+	keys[3] = &incrementrxz;
+	keys[4] = &decrementrxy;
+	keys[5] = &decrementryz;
+	keys[6] = &decrementrxz;
+	keys[7] = &pane_up;
+	keys[8] = &pane_left;
+	keys[9] = &pane_down;
+	keys[10] = &pane_right;
+	keys[11] = &scale_up;
+	keys[12] = &scale_down;
+}
+
+/*
+** deal_key
+** Captures a key code and concerts it into the function
+** pointer array for the proper function.
+*/
+
+int		deal_key(int key, void *params)
+{
+	int		ret;
+	char	*skey;
+	int		(*keyfuncts[13])(t_map *);
+
+	initkeys((void **)&keyfuncts);
 	if (NULL == (skey = ft_itoa(key)))
 	{
-		ft_putendl("Malloc failed (deal_key)");
+		ft_putendl("Malloc failed (deal_key -> ft_itoa)");
 		exit(7);
 	}
 	if ((ret = get_strind(skey)) != -1)
 		keyfuncts[ret]((t_map *)params);
-	free (skey);
-    return(0);
+	free(skey);
+	return (0);
 }
+
+/*
+** close_fdf
+** Closes fdf
+*/
 
 int		close_fdf(t_map *map)
 {
 	(void)map;
 	exit(0);
-	return(0);
+	return (0);
 }

@@ -33,13 +33,13 @@ void	mapdel(char ***map)
 	}
 }
 
-t_map	*initmap(int *fd, char *file)
+t_map	*initmap(char *file)
 {
 	t_map *map;
 
 	if (NULL == (map = (t_map *)malloc(sizeof(t_map))))
 	{
-		ft_putendl("Malloc failed (initmap)");
+		ft_putendl("Malloc failed initializing map struct (initmap)");
 		exit(5);
 	}
 	map->rxy = -.6;
@@ -56,7 +56,7 @@ void	init_map_window(t_map *map)
 {
 	if (NULL == (map->mlxp = mlx_init()))
 	{
-		ft_putendl("Error; MLX Init returned NULL... Exiting.");
+		ft_putendl("Error; MLX Init returned NULL. Exiting.");
 		free(map);
 		exit(3);
 	}
