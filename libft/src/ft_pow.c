@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-long long ft_pow(long long nbr, int p)
+long long	ft_pow(long long nbr, int p)
 {
 	int out;
 

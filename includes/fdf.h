@@ -32,8 +32,8 @@
 ** Map defaults
 */
 
-#define ROT_SPD .3
-#define PANE_SPD 25
+# define ROT_SPD .3
+# define PANE_SPD 25
 # define X_OFF WIN_SIZE_X / 2
 # define Y_OFF WIN_SIZE_Y / 2
 # define DEFAULT_COLOR 0xffffff
@@ -49,9 +49,9 @@
 ** NOTE: color specified in a file always overrides these colors.
 */
 
-#define USE_RAINBOW 1
-#define RAINBOW_MIN -5
-#define RAINBOW_SPREAD 20
+# define USE_RAINBOW 1
+# define RAINBOW_MIN -5
+# define RAINBOW_SPREAD 20
 
 /*
 ** ZSCALE affects the perceived depth, value scales with the magnitude of depth.
@@ -69,13 +69,13 @@
 
 typedef struct	s_vector
 {
-	float x;
-	float y;
-	float z;
-	int px;
-	int py;
-	int wall;
-	int color;
+	float	x;
+	float	y;
+	float	z;
+	int		px;
+	int		py;
+	int		wall;
+	int		color;
 }				t_vector;
 
 /*
@@ -89,65 +89,67 @@ typedef struct	s_vector
 
 typedef struct	s_map
 {
-	void *mlxp;
-	void *winp;
-	float rxy;
-	float ryz;
-	float rxz;
-	float scale;
-	int xo;
-	int yo;
-	int xmid;
-	int ymid;
-	t_vector **vects;
+	void		*mlxp;
+	void		*winp;
+	float		rxy;
+	float		ryz;
+	float		rxz;
+	float		scale;
+	int			xo;
+	int			yo;
+	int			xmid;
+	int			ymid;
+	t_vector	**vects;
 }				t_map;
 
-int				ft_openfile(char *file);
 void			put_fdf(char *file);
-t_vector		**get_map(int fd);
-void			mapdel(char ***map);
 void			putline(t_map *map, t_vector v1, t_vector v2);
-t_vector		new_vect(double x, double y, double z, int *color);
-t_map			*initmap(char *file);
-t_vector		new_wall_vect(void);
+void			printmap(t_map *map);
+void			init_map_window(t_map *map);
+void			put_guide(t_map *map);
+
 int				ft_openfile(char *file);
 int				get_filelc(char *filename, t_map *map);
-t_vector rotate_vect(t_map map, t_vector v1);
-t_vector setpos(t_vector v, t_map map);
-t_vector	**get_vectors(int fd, int maxlines, t_map *map);
-void	printmap(t_map *map);
-void	init_map_window(t_map *map);
-void	put_guide(t_map *map);
+t_map			*initmap(void);
+
+t_vector		**get_vectors(int fd, int maxlines, t_map *map);
+t_vector		new_vect(double x, double y, double z, int *color);
+t_vector		new_wall_vect(void);
+t_vector		rotate_vect(t_map map, t_vector v1);
+t_vector		**get_map(int fd);
+t_vector		setpos(t_vector v, t_map map);
+
 int				gradient(int start, int end, double perc);
-int rainbow_gradient(int i);
+int				rainbow_gradient(int i);
 
 /*
 ** Keyhook fucnts
 */
+
 int				deal_key(int key, void *params);
 
-int			pane_right(t_map *map);
-int			pane_left(t_map *map);
-int			pane_down(t_map *map);
-int			pane_up(t_map *map);
-int			decrementrxy(t_map *map);
-int			decrementryz(t_map *map);
-int			decrementrxz(t_map *map);
-int			incrementrxy(t_map *map);
-int			incrementryz(t_map *map);
-int			incrementrxz(t_map *map);
-int			scale_up(t_map *map);
-int			scale_down(t_map *map);
-int			close_fdf(t_map *map);
+int				pane_right(t_map *map);
+int				pane_left(t_map *map);
+int				pane_down(t_map *map);
+int				pane_up(t_map *map);
+int				decrementrxy(t_map *map);
+int				decrementryz(t_map *map);
+int				decrementrxz(t_map *map);
+int				incrementrxy(t_map *map);
+int				incrementryz(t_map *map);
+int				incrementrxz(t_map *map);
+int				scale_up(t_map *map);
+int				scale_down(t_map *map);
+int				close_fdf(t_map *map);
 
 /*
 ** Errors
 ** All error_fdf_* functions cause an exit.
 */
 
-void	error_fdf_line_elements(void);
-void	error_fdf_type(void);
-void	error_fdf_fileopen(void);
-void	error_fdf_read(void);
+void			error_fdf_line_elements(void);
+void			error_fdf_type(void);
+void			error_fdf_fileopen(void);
+void			error_fdf_read(void);
 
 #endif

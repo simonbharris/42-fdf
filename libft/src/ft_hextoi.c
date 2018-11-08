@@ -31,10 +31,10 @@ static int			get_hex_charv(char c)
 	return (-1000000);
 }
 
-long long	get_hex_value(char *str)
+long long			get_hex_value(char *str)
 {
-	long long out;
-	int len;
+	long long	out;
+	int			len;
 
 	out = 0;
 	len = 0;
