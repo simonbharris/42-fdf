@@ -33,7 +33,7 @@ void	mapdel(char ***map)
 	}
 }
 
-t_map	*initmap(char *file)
+t_map	*initmap(void)
 {
 	t_map *map;
 
@@ -65,8 +65,12 @@ void	init_map_window(t_map *map)
 
 void	put_guide(t_map *map)
 {
-	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X -120, 12, 0xffffff, "Rotate: WASD + QE");
-	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X -120, 12 * 2, 0xffffff, "Pane: Arrow keys");
-	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X -120, 12 * 3, 0xffffff, "Scale: '-' '+'");
-	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X -120, 12 * 4, 0xffffff, "Close: ESC");
+	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X - 120, 12, 0xffffff,
+		"Rotate: WASD + QE");
+	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X - 120, 12 * 2, 0xffffff,
+		"Pane: Arrow keys");
+	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X - 120, 12 * 3, 0xffffff,
+		"Scale: '-' '+'");
+	mlx_string_put(map->mlxp, map->winp, WIN_SIZE_X - 120, 12 * 4, 0xffffff,
+		"Close: ESC");
 }

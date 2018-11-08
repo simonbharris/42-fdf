@@ -105,7 +105,6 @@ int				get_filelc(char *filename, t_map *map)
 static t_vector	*splittovect(char **split, int ind, t_map map)
 {
 	int			i;
-	int			len;
 	char		*tmp;
 	int			col;
 	t_vector	*vects;

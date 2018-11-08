@@ -84,12 +84,11 @@ void			putline(t_map *map, t_vector v1, t_vector v2)
 
 void			put_fdf(char *file)
 {
-	int		i;
 	int		fd;
 	t_map	*map;
 
 	fd = ft_openfile(file);
-	map = initmap(file);
+	map = initmap();
 	map->vects = get_vectors(fd, get_filelc(file, map) + 1, map);
 	close(fd);
 	init_map_window(map);

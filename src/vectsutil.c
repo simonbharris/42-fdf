@@ -30,23 +30,22 @@ void	vect_iter(t_map *map, void (*f)(t_vector *))
 	}
 }
 
-void panev_up(t_vector *v)
+void	panev_up(t_vector *v)
 {
 	v->y -= PANE_SPD;
 }
 
-void panev_down(t_vector *v)
+void	panev_down(t_vector *v)
 {
 	v->y += PANE_SPD;
 }
 
-void panev_left(t_vector *v)
+void	panev_left(t_vector *v)
 {
 	v->x -= PANE_SPD;
 }
 
-void panev_right(t_vector *v)
+void	panev_right(t_vector *v)
 {
 	v->x += PANE_SPD;
 }
-

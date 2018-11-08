@@ -37,7 +37,6 @@ HEADER = $(INC)fdf.h
 # LIB
 LIBFT_DIR = libft/
 LIBFT = $(LIBFT_DIR)libft.a
-# ! DEBUG: LIBFT_FLAG = $(LIBFT_DIR)src/* -I $(LIBFT_DIR)includes
 LIBFT_INC_FLAG = -I $(LIBFT_DIR)includes
 LIBFT_FLAG = -L $(LIBFT_DIR) -l ft $(LIBFT_INC_FLAG)
 
@@ -52,43 +51,45 @@ X11_FLAG = -L /opt/X11/lib -l X11 -l Xext
 
 # Compiler
 CC = gcc
-# TODO: KEEP: CFLAGS = -Wall -Wextra -Werror -c
-CFLAGS = -c
+CFLAGS = -c -Wall -Wextra -Werror
+WARNING_FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
 mkdir : $(OBJ_DIR)
 
-# ! -########################  Replace SRC_RAW with OBJ equivalent
 $(NAME): $(OBJ_DIR) $(LIBFT) $(MLX_LIB) $(OBJ)
-	$(CC) $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(OBJ) -o $(NAME)
+	$(CC) $(WARNING_FLAGS) $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(OBJ) -o $(NAME)
 
 $(OBJ): $(OBJ_DIR)%.o : $(SRC_DIR)%.c $(HEADER)
-	$(CC) $(CFLAGS) $(INC_FLAG) $(LIBFT_INC_FLAG) $< -o $@
+	$(CC) $(WARNING_FLAGS) $(CFLAGS) $(INC_FLAG) $(LIBFT_INC_FLAG) $< -o $@
 
 $(LIBFT):
-	make -C $(LIBFT_DIR)
+	@echo "Making libft libraries."
+	@make -C $(LIBFT_DIR)
 
 $(OBJ_DIR):
-	mkdir $(OBJ_DIR)
+	echo "Making obj/ directory."
+	@mkdir $(OBJ_DIR)
 
 $(MLX_LIB):
-	make -C $(MLX_DIR)
+	@echo "Making minilibx libraries."
+	@make -C $(MLX_DIR)
 
 $(LIBFT_FLAG): $(LIBFT)
 
 debug: $(OBJ_DIR) $(LIBFT) $(MLX_LIB) $(OBJ)
 	$(CC) -g $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(SRC) -o $(NAME)
 
-
-# ! --############## Be sure to eventually switch to .o files (.c for now in debugging.)
 clean:
-# !	make clean -C $(MLX_DIR)
-	make clean -C $(LIBFT_DIR)
-	rm -Rf $(OBJ_DIR)
+	@echo "Cleaning compiled sources."
+	@make clean -C $(MLX_DIR)
+	@make clean -C $(LIBFT_DIR)
+	@rm -Rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(NAME)
-	make fclean -C $(LIBFT_DIR)
+	@echo "Cleaning executable and libraries"
+	@rm -f $(NAME)
+	@make fclean -C $(LIBFT_DIR)
 
 re: fclean all
