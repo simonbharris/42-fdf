@@ -13,7 +13,6 @@
 #include <fdf.h>
 #include <math.h>
 
-
 t_map	*initmap(void)
 {
 	t_map *map;

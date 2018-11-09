@@ -12,7 +12,7 @@
 
 #include <fdf.h>
 
-int			scale_up(t_map *map)
+int	scale_up(t_map *map)
 {
 	if (map->scale > .5)
 	{
@@ -22,9 +22,9 @@ int			scale_up(t_map *map)
 	return (0);
 }
 
-int			scale_down(t_map *map)
+int	scale_down(t_map *map)
 {
-	if(map->scale < 450)
+	if (map->scale < 450)
 	{
 		map->scale *= 1.1;
 		generate_image(*map);

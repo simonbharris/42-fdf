@@ -12,20 +12,13 @@
 
 #include <fdf.h>
 
-#define SCALE_PTS(x1, x2, i) (x1) + (x2 - x1) * i
-
-void printmap(t_map *map)
-{
-	(void)generate_image(*map);
-}
-
 /*
 ** put_fdf
 ** Opens, intiializes, and obtains the vectors from the input file.
 ** prints the map, then initializes the key hooks and wait for user input.
 */
 
-void			put_fdf(char *file)
+void	put_fdf(char *file)
 {
 	int		fd;
 	t_map	*map;
@@ -36,7 +29,6 @@ void			put_fdf(char *file)
 	close(fd);
 	init_map_window(map);
 	map->imgp = mlx_new_image(map->mlxp, WIN_SIZE_X, WIN_SIZE_Y);
-	// printmap(map);
 	(void)generate_image(*map);
 	mlx_key_hook(map->winp, deal_key, map);
 	mlx_hook(map->winp, 17, 1L << 17, close_fdf, NULL);

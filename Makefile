@@ -54,7 +54,6 @@ X11_FLAG = -L /opt/X11/lib -l X11 -l Xext
 # Compiler
 CC = gcc
 CFLAGS = -c 
-WARNING_FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 

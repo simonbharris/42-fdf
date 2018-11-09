@@ -25,6 +25,7 @@
 
 # define WIN_SIZE_X 1280
 # define WIN_SIZE_Y 720
+# define IMG_ADDR_SIZE (WIN_SIZE_Y * WIN_SIZE_X * 4)
 # define WIN_MAX_SIZE (WIN_SIZE_X > WIN_SIZE_Y ? WIN_SIZE_X : WIN_SIZE_Y)
 # define WIN_NAME "fdf"
 
