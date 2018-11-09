@@ -14,14 +14,20 @@
 
 int			scale_up(t_map *map)
 {
-	map->scale *= 0.9;
-	printmap(map);
+	if (map->scale > .5)
+	{
+		map->scale *= 0.9;
+		generate_image(*map);
+	}
 	return (0);
 }
 
 int			scale_down(t_map *map)
 {
-	map->scale *= 1.1;
-	printmap(map);
+	if(map->scale < 450)
+	{
+		map->scale *= 1.1;
+		generate_image(*map);
+	}
 	return (0);
 }

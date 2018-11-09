@@ -32,8 +32,8 @@
 ** Map defaults
 */
 
-# define ROT_SPD .3
-# define PANE_SPD 25
+# define ROT_SPD .2
+# define PANE_SPD 50
 # define X_OFF WIN_SIZE_X / 2
 # define Y_OFF WIN_SIZE_Y / 2
 # define DEFAULT_COLOR 0xffffff
@@ -50,14 +50,14 @@
 */
 
 # define USE_RAINBOW 1
-# define RAINBOW_MIN -5
+# define RAINBOW_MIN 0
 # define RAINBOW_SPREAD 20
 
 /*
 ** ZSCALE affects the perceived depth, value scales with the magnitude of depth.
 */
 
-# define ZSCALE .25
+# define ZSCALE .5
 
 /*
 ** s_vector
@@ -91,6 +91,7 @@ typedef struct	s_map
 {
 	void		*mlxp;
 	void		*winp;
+	void		*imgp;
 	float		rxy;
 	float		ryz;
 	float		rxz;
@@ -103,8 +104,6 @@ typedef struct	s_map
 }				t_map;
 
 void			put_fdf(char *file);
-void			putline(t_map *map, t_vector v1, t_vector v2);
-void			printmap(t_map *map);
 void			init_map_window(t_map *map);
 void			put_guide(t_map *map);
 
@@ -116,8 +115,10 @@ t_vector		**get_vectors(int fd, int maxlines, t_map *map);
 t_vector		new_vect(double x, double y, double z, int *color);
 t_vector		new_wall_vect(void);
 t_vector		rotate_vect(t_map map, t_vector v1);
-t_vector		**get_map(int fd);
 t_vector		setpos(t_vector v, t_map map);
+int				check_points_in_range(t_vector v1, t_vector v2);
+
+void			generate_image(t_map map);
 
 int				gradient(int start, int end, double perc);
 int				rainbow_gradient(int i);

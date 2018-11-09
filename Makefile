@@ -24,7 +24,9 @@ SRC_RAW = 	main \
 			pane_map \
 			rotatedown_map \
 			rotateup_map \
-			scale_map
+			scale_map \
+			image \
+			vectpos
 
 SRC = $(SRC_RAW:%=$(SRC_DIR)%.c)
 SRC_DIR = src/
@@ -51,7 +53,7 @@ X11_FLAG = -L /opt/X11/lib -l X11 -l Xext
 
 # Compiler
 CC = gcc
-CFLAGS = -c -Wall -Wextra -Werror
+CFLAGS = -c 
 WARNING_FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
@@ -59,10 +61,10 @@ all: $(NAME)
 mkdir : $(OBJ_DIR)
 
 $(NAME): $(OBJ_DIR) $(LIBFT) $(MLX_LIB) $(OBJ)
-	$(CC) $(WARNING_FLAGS) $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(OBJ) -o $(NAME)
+	$(CC) $(LIBFT_FLAG) $(MLX_FLAG) $(X11_FLAG) $(INC_FLAG) $(OBJ) -o $(NAME)
 
 $(OBJ): $(OBJ_DIR)%.o : $(SRC_DIR)%.c $(HEADER)
-	$(CC) $(WARNING_FLAGS) $(CFLAGS) $(INC_FLAG) $(LIBFT_INC_FLAG) $< -o $@
+	$(CC) $(CFLAGS) $(INC_FLAG) $(LIBFT_INC_FLAG) $< -o $@
 
 $(LIBFT):
 	@echo "Making libft libraries."

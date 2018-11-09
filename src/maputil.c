@@ -13,25 +13,6 @@
 #include <fdf.h>
 #include <math.h>
 
-void	mapdel(char ***map)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			free(map[i][j]);
-			map[i][j++] = NULL;
-		}
-		free(map[i]);
-		map[i] = NULL;
-		i++;
-	}
-}
 
 t_map	*initmap(void)
 {
@@ -42,8 +23,8 @@ t_map	*initmap(void)
 		ft_putendl("Malloc failed initializing map struct (initmap)");
 		exit(5);
 	}
-	map->rxy = -.6;
-	map->ryz = .6;
+	map->rxy = 0;
+	map->ryz = 0;
 	map->rxz = 0;
 	map->scale = 10;
 	map->xo = X_OFF;
