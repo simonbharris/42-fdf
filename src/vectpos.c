@@ -18,37 +18,6 @@
 #define IN_WIN_RANGE(vct) (INSIDE_WIN_X(vct) || INSIDE_WIN_Y(vct))
 
 /*
-** adjust_vect_pos
-** if x coordinate is outside the window, sets x to 0 or WIN_SIZE_X and y
-** to the appropriate intercept.
-** Linewise with y.
-*/
-
-static void adjust_vect_pos(t_vector *v, double slope)
-{
-	if (v->px < 0)
-	{
-		v->py = (v->py + slope * v->px);
-		v->px = 0;
-	}
-	else if (v->px > WIN_SIZE_X)
-	{
-		v->py = slope / WIN_SIZE_X - B(v);
-		v->px = 0;
-	}
-	else if (v->py <= 0)
-	{
-		v->px = v->py + slope * v->px / slope;
-		v->py = 0;
-	}
-	else if (v->py >= WIN_SIZE_Y)
-	{
-		v->px = (WIN_SIZE_Y - B(v)) / slope;
-		v->py = WIN_SIZE_Y;
-	}
-}
-
-/*
 ** If either vector lies inside the window / draws through the window
 ** return 1
 ** Otherwise returns 0
