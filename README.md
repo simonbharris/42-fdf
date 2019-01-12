@@ -4,6 +4,7 @@ A basic graphics program that displays a 3d wire-style height map.
 Visual example below!
 
 Developed:
+
 Explicit colors as defined by a file
 Color defaults to a heat-map style gradient, magnitude of colors and scale modifying by define macros.
 Very fast rendering.
