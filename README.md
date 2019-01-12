@@ -13,6 +13,6 @@ Rotate, pane, and increase the zoom level.
 
 Does not crash or leak.
 
-Created using very limited access to normal C function, alongside with the minilibx graphics library.
+Created using very limited access to normal C function (Or function that I created using this limitation, as foundi n libft), alongside with the minilibx graphics library.
 
 ![Mars heatmap image](https://cdn.discordapp.com/attachments/118591743980601344/509822002106728467/Screen_Shot_2018-11-07_at_12.10.14_PM.png)
