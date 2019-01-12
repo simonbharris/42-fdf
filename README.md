@@ -1,7 +1,7 @@
 # 42-fdf
 A basic graphics program that displays a 3d wire-style height map.
 
-Visual example beloW!
+Visual example below!
 
 Developed:
 Explicit colors as defined by a file
