@@ -5,8 +5,8 @@ Visual example below!
 
 Developed:
 
-Explicit colors as defined by a file
-Color defaults to a heat-map style gradient, magnitude of colors and scale modifying by define macros.
+Explicit colors as defined by a file.
+Color default to a heat-map style gradient, of which the magnitude of the colors and scaling modifiers are defined macros.
 Very fast rendering.
 
 Using hotkeys, the user can:
